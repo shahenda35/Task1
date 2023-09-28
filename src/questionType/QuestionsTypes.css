@@ -1,3 +1,36 @@
 .hidden {
   display: none;
 }
+.mcq-text {
+  width: 441px;
+  height: 68px;
+  border-radius: 5px;
+  border: 1px solid #a0a0a0;
+  background-color: inherit;
+  margin-left: 20px;
+  margin-right: 16px;
+}
+
+.title {
+  padding-left: 60px;
+  margin-bottom: 7px;
+}
+
+.btn-addchoice {
+  width: 13px;
+  height: 13.3px;
+  font-weight: bold;
+}
+
+.max-choice {
+  width: 537px;
+  height: 68px;
+  border-radius: 5px;
+  border: 1px solid #000000;
+  background-color: inherit;
+}
+
+.choises,
+.yesno {
+  margin-top: 15px;
+}

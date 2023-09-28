@@ -85,13 +85,58 @@ class Questions extends React.Component<{}, QuestionsState> {
     }
   };
 
-  onQuestionSave = (value: any) => {
-    //this.setState({ savedQuestion: value });
-    console.log(value["Question"]);
+  onQuestionSave = async (newData: any) => {
+    try {
+      const response = await fetch(
+        "http://127.0.0.1:4010/api/887.7935644644983/programs/enim/application-form",
+        {
+          method: "put", // Change the HTTP method to POST
+          headers: {
+            "Content-Type": "application-fotm/yaml", // Change the content type to JSON
+          },
+          // body: JSON.stringify(newData), // Convert the data to JSON format
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const jsonResponse = await response.json();
+
+      // Check if the response contains valid JSON data
+      if (jsonResponse && Object.keys(jsonResponse).length > 0) {
+        console.log("Server response:", jsonResponse);
+      } else {
+        throw new Error("Empty or invalid JSON response");
+      }
+
+      // Reset the input field or clear any form data
+      this.setState({ savedQuestion: "" });
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
+  // onQuestionSave = (value: any) => {
+  //   fetch(
+  //     "http://127.0.0.1:4010/api/887.7935644644983/programs/enim/application-form",
+  //     {
+  //       method: "PUT",
+  //       headers: {
+  //         "Content-Type": "application-form/yaml",
+  //       },
+  //       // body: '{"dataToSend": {"key1": "value1", "key2": "value2"}}',
+  //     }
+  //   );
+  //   console.log("success");
+  //   new ApplicationForm(value);
+
+  //   //this.setState({ savedQuestion: value });
+  //   console.log(value["Question"]);
+  // };
+
   render() {
-    console.log("rendering...");
     const { data, isLoading, error, open } = this.state;
     if (isLoading) {
       return <div>Loading...</div>;
@@ -105,8 +150,9 @@ class Questions extends React.Component<{}, QuestionsState> {
     }
     return (
       <div className="question-container">
-        <h3>Questions</h3>
+        <h3 className="q-title">Questions</h3>
         <>
+          {/* question type */}
           <div className="question-type">
             <h4>Type</h4>
             <div className="dropdown-container">
@@ -141,15 +187,21 @@ class Questions extends React.Component<{}, QuestionsState> {
             </div>
           </div>
 
+          {/* question */}
           <div className="question">
             <h4>Question</h4>
             <input
               type="text"
               className="question-text"
               placeholder="  Type here"
+              value={this.state.savedQuestion} // Connect the input value to the state variable
+              onChange={(event) =>
+                this.setState({ savedQuestion: event.target.value })
+              }
             ></input>
           </div>
 
+          {/* choosen */}
           <div className="type-choosen">
             <QuestionsTypes
               selectValue={this.state.selectValue}

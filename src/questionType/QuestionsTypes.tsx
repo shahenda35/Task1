@@ -24,51 +24,92 @@ class QuestionsTypes extends React.Component<QuestionType> {
     this.setState({ Question: event.target.value });
   };
 
-  render() {
-    switch (this.props.selectValue) {
-      case "Paragraph":
-        document
-          .querySelector(".paragraph-container")
-          ?.classList.remove("hidden");
-        break;
-
-      case "DropDown":
-        document
-          .querySelector(".dropdown-container")
-          ?.classList.remove("hidden");
-        break;
-      case "Multiple Choice":
-        document.querySelector(".mcq-container")?.classList.remove("hidden");
-        break;
-
-      case "Yes/No":
-        document
-          .querySelector(".yesorno-container")
-          ?.classList.remove("hidden");
-        break;
-
-      default:
-        break;
+  componentDidUpdate(prevProps: QuestionType) {
+    if (prevProps.selectValue !== this.props.selectValue) {
+      this.setState({ selectValue: this.props.selectValue });
     }
+  }
 
+  render() {
+    const isVisibleParagraph = this.props.selectValue === "Paragraph";
+    const isVisibleMCQ = this.props.selectValue === "Multiple Choice";
+    const isVisibleDropdown = this.props.selectValue === "DropDown";
+    const isVisibleYesNo = this.props.selectValue === "Yes/No";
     return (
       <>
         <div className="questionType-container">
           <div>
-            <div className="paragraph-container hidden">
+            {/* paragrapgh container */}
+            <div
+              className={`paragraph-container ${
+                isVisibleParagraph ? "" : "hidden"
+              }`}
+            >
               {/* <input type="text" id="in-q" onChange={this.handleInputChange} /> */}
             </div>
 
-            <div className="mcq-container hidden">
-              <h4>Choice</h4>
-              <input type="radio" name="" id="" />
+            {/* mcq contianer */}
+            <div className={`mcq-container ${isVisibleMCQ ? "" : "hidden"}`}>
+              <h3 className="title">Choice</h3>
+              <div>
+                <img src={require("../icons/unorderedList.png")} alt=""></img>
+                <input
+                  type="text"
+                  className="mcq-text"
+                  placeholder="  Type here"
+                  id="in-q"
+                  onChange={this.handleInputChange}
+                />
+                <span className="btn-addchoice">+</span>
+              </div>
+              <div className="choises">
+                <input type="checkbox"></input>
+                <span className="enable-options">Enable "Other" option</span>
+                <h3>Max choice allowed</h3>
+                <input
+                  className="max-choice"
+                  type="number"
+                  placeholder="Enter number of choice allowed here"
+                ></input>
+              </div>
             </div>
 
-            <div className="dropdown-container hidden">dropdwon</div>
+            {/* dropdown container */}
+            <div
+              className={`dropdown-container ${
+                isVisibleDropdown ? "" : "hidden"
+              }`}
+            >
+              <h3 className="title">Choice</h3>
+              <div>
+                <img src={require("../icons/unorderedList.png")} alt=""></img>
+                <input
+                  type="text"
+                  className="mcq-text"
+                  placeholder="  Type here"
+                />
+                <span className="btn-addchoice">+</span>
+              </div>
+              <div className="choises">
+                <input type="checkbox"></input>
+                <span className="enable-options">Enable "Other" option</span>
+              </div>
+            </div>
 
-            <div className="yesorno-container hidden">yes or no</div>
+            {/* yes no container */}
+            <div
+              className={`yesorno-container ${isVisibleYesNo ? "" : "hidden"}`}
+            >
+              <div className="yesno">
+                <input type="checkbox"></input>
+                <span className="disqualified">
+                  Disqualify candidate if the answer is no
+                </span>
+              </div>
+            </div>
           </div>
 
+          {/* buttons */}
           <div className="btns-composite">
             <button className="btn-delete">
               <h2>X delete question</h2>
