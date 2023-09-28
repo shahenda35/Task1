@@ -4,6 +4,7 @@ import "../questionType/QuestionsTypes.css";
 
 interface QuestionType {
   selectValue: string;
+  question: string;
   onQuestionSave: (data: any) => void;
 }
 
@@ -35,6 +36,7 @@ class QuestionsTypes extends React.Component<QuestionType> {
     const isVisibleMCQ = this.props.selectValue === "Multiple Choice";
     const isVisibleDropdown = this.props.selectValue === "DropDown";
     const isVisibleYesNo = this.props.selectValue === "Yes/No";
+    const { question } = this.props;
     return (
       <>
         <div className="questionType-container">
@@ -118,6 +120,8 @@ class QuestionsTypes extends React.Component<QuestionType> {
               Save
             </button>
           </div>
+
+          <p>Question: {question}</p>
         </div>
       </>
     );

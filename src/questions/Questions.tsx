@@ -11,6 +11,7 @@ interface QuestionsState {
   selectValue: string;
   types: { name: string }[];
   savedQuestion: string;
+  questionsList: string[];
 }
 
 class Questions extends React.Component<{}, QuestionsState> {
@@ -34,6 +35,7 @@ class Questions extends React.Component<{}, QuestionsState> {
         { name: "Video Question" },
       ],
       savedQuestion: "",
+      questionsList: [],
     };
   }
 
@@ -85,56 +87,18 @@ class Questions extends React.Component<{}, QuestionsState> {
     }
   };
 
-  onQuestionSave = async (newData: any) => {
-    try {
-      const response = await fetch(
-        "http://127.0.0.1:4010/api/887.7935644644983/programs/enim/application-form",
-        {
-          method: "put", // Change the HTTP method to POST
-          headers: {
-            "Content-Type": "application-fotm/yaml", // Change the content type to JSON
-          },
-          // body: JSON.stringify(newData), // Convert the data to JSON format
-        }
-      );
+  onQuestionSave = () => {
+    const { savedQuestion, questionsList } = this.state;
 
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      const jsonResponse = await response.json();
-
-      // Check if the response contains valid JSON data
-      if (jsonResponse && Object.keys(jsonResponse).length > 0) {
-        console.log("Server response:", jsonResponse);
-      } else {
-        throw new Error("Empty or invalid JSON response");
-      }
-
-      // Reset the input field or clear any form data
-      this.setState({ savedQuestion: "" });
-    } catch (error) {
-      console.error("Error:", error);
+    if (savedQuestion.trim() !== "") {
+      this.setState({
+        questionsList: [...questionsList, savedQuestion],
+        savedQuestion: "",
+      });
     }
+
+    console.log(questionsList);
   };
-
-  // onQuestionSave = (value: any) => {
-  //   fetch(
-  //     "http://127.0.0.1:4010/api/887.7935644644983/programs/enim/application-form",
-  //     {
-  //       method: "PUT",
-  //       headers: {
-  //         "Content-Type": "application-form/yaml",
-  //       },
-  //       // body: '{"dataToSend": {"key1": "value1", "key2": "value2"}}',
-  //     }
-  //   );
-  //   console.log("success");
-  //   new ApplicationForm(value);
-
-  //   //this.setState({ savedQuestion: value });
-  //   console.log(value["Question"]);
-  // };
 
   render() {
     const { data, isLoading, error, open } = this.state;
@@ -194,7 +158,7 @@ class Questions extends React.Component<{}, QuestionsState> {
               type="text"
               className="question-text"
               placeholder="  Type here"
-              value={this.state.savedQuestion} // Connect the input value to the state variable
+              value={this.state.savedQuestion}
               onChange={(event) =>
                 this.setState({ savedQuestion: event.target.value })
               }
@@ -206,7 +170,18 @@ class Questions extends React.Component<{}, QuestionsState> {
             <QuestionsTypes
               selectValue={this.state.selectValue}
               onQuestionSave={this.onQuestionSave}
+              question={this.state.savedQuestion}
             />
+          </div>
+
+          {/* List of saved questions */}
+          <div className="questions-list">
+            {/* <h4>Saved Questions</h4> */}
+            {/* <div>
+              {this.state.questionsList.map((question, index) => (
+                <QuestionsTypes key={index}  selectValue={this.state.selectValue} />
+              ))}
+            </div> */}
           </div>
         </>
       </div>
